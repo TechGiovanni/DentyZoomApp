@@ -1,13 +1,13 @@
-import blessed from '../../assets/feelings/blessed.jpg';
-import excited from '../../assets/feelings/excited.jpg';
-import happy from '../../assets/feelings/happy.jpg';
-import loved from '../../assets/feelings/loved.jpg';
-import angry from '../../assets/reactions/angry.png';
-import haha from '../../assets/reactions/haha.png';
-import like from '../../assets/reactions/like.png';
-import love from '../../assets/reactions/love.png';
-import sad from '../../assets/reactions/sad.png';
-import wow from '../../assets/reactions/wow.png';
+import blessed from '../../assets/images/feelings/blessed.jpg';
+import excited from '../../assets/images/feelings/excited.jpg';
+import happy from '../../assets/images/feelings/happy.jpg';
+import loved from '../../assets/images/feelings/loved.jpg';
+import angry from '../../assets/images/reactions/angry.png';
+// import hap from '../../assets/images/reactions/happy.png';
+import like from '../../assets/images/reactions/like.png';
+import love from '../../assets/images/reactions/love.png';
+import sad from '../../assets/images/reactions/sad.png';
+import wow from '../../assets/images/reactions/wow.png';
 import {
   FaBirthdayCake,
   FaComments,
@@ -199,7 +199,7 @@ export const reactionsMap = {
   love,
   wow,
   sad,
-  haha,
+  happy,
   angry
 };
 
@@ -207,7 +207,7 @@ export const reactionsColor = {
   like: '#50b5ff',
   love: '#f33e58',
   angry: '#e9710f',
-  haha: '#f7b124',
+  happy: '#f7b124',
   sad: '#f7b124',
   wow: '#f7b124'
 };

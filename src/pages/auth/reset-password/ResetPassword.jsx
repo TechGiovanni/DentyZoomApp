@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-
-// stylesheet
-import './ResetPassword.scss';
 
 // assets
 import backgroundImage from '../../../assets/images/background.jpg';
@@ -12,7 +9,43 @@ import backgroundImage from '../../../assets/images/background.jpg';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button';
 
+// Services
+import { authService } from '../../../services/api/auth/auth.service';
+
+// stylesheet
+import './ResetPassword.scss';
+
 const ResetPassword = () => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  // instead of hasError, it was renamed to showAlert
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
+  const [searchParams] = useSearchParams(); // params
+
+  const handleResetPassword = async (event) => {
+    setLoading(true);
+    event.preventDefault();
+    try {
+      const body = { password, confirmPassword };
+      const response = await authService.resetPassword(searchParams.get('token'), body);
+
+      setLoading(false);
+      setPassword('');
+      setConfirmPassword('');
+      setShowAlert(false);
+      setAlertType('alert-success');
+      setResponseMessage(response?.data?.message);
+    } catch (error) {
+      setAlertType('alert-error');
+      setLoading(false);
+      setShowAlert(true);
+      setResponseMessage(error?.response?.data?.message);
+    }
+  };
+
   return (
     <>
       <div className="container-wrapper" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -27,10 +60,12 @@ const ResetPassword = () => {
               </ul>
               <div className="tab-item">
                 <div className="auth-inner">
-                  <div className="alerts" role="alert">
-                    Error message
-                  </div>
-                  <form className="reset-password-form">
+                  {responseMessage && (
+                    <div className={`alerts ${alertType}`} role="alert">
+                      {responseMessage}
+                    </div>
+                  )}
+                  <form className="reset-password-form" onSubmit={handleResetPassword}>
                     <div className="form-input-container">
                       <Input
                         id="password"
@@ -39,19 +74,26 @@ const ResetPassword = () => {
                         value={password}
                         labelText="New Password"
                         placeholder="New Password"
-                        handleChange={() => {}}
+                        style={{ border: `${showAlert ? '1px solid #fa9b8a' : ''}` }}
+                        handleChange={(e) => setPassword(e.target.value)}
                       />
                       <Input
-                        id="cpassword"
-                        name="cpassword"
+                        id="confirmPassword"
+                        name="confirmPassword"
                         type="password"
                         value={confirmPassword}
                         labelText="Confirm Password"
                         placeholder="Confirm Password"
-                        handleChange={() => {}}
+                        style={{ border: `${showAlert ? '1px solid #fa9b8a' : ''}` }}
+                        handleChange={(e) => setConfirmPassword(e.target.value)}
                       />
                     </div>
-                    <Button label="RESET PASSWORD" className="auth-button button" disabled={false} />
+
+                    <Button
+                      label={`${loading ? 'RESET PASSWORD IN PROGRESS...' : 'RESET PASSWORD'}`}
+                      className="auth-button button"
+                      disabled={(!password, !confirmPassword)}
+                    ></Button>
 
                     <Link to={'/'}>
                       <span className="login">
